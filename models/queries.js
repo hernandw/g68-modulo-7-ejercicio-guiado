@@ -37,4 +37,49 @@ const getAllRoutines = async () => {
   }
 };
 
-export { addRoutineQueries, getAllRoutines };
+const updateEjercicioQuery = async ({
+  nombre,
+  series,
+  repeticiones,
+  descanso,
+}) => {
+  try {
+    const sql = {
+      text: "UPDATE ejercicios SET nombre = $1, series = $2, repeticiones = $3, descanso = $4 WHERE nombre = $1 returning *",
+      values: [nombre, series, repeticiones, descanso],
+    };
+    const response = await pool.query(sql);
+    if (response.rowCount > 0) {
+      return response.rows;
+    } else {
+      return new Error("No se actualizo el ejercicio");
+    }
+  } catch (error) {
+    console.log("Error code: ", error.code, "Error message: ", error.message);
+  }
+};
+
+const deleteRoutineQueries = async (nombre) => {
+  try {
+    const sql = {
+      text: "DELETE FROM ejercicios WHERE nombre = $1 returning *",
+      values: [nombre],
+    };
+
+    const result = await pool.query(sql);
+    if (result.rowCount > 0) {
+      return result.rows[0];
+    } else {
+      return new Error("No se pudo eliminar el ejercicio");
+    }
+  } catch (error) {
+    console.log("Error code: ", error.code, "Error message: ", error.message);
+  }
+};
+
+export {
+  addRoutineQueries,
+  getAllRoutines,
+  updateEjercicioQuery,
+  deleteRoutineQueries,
+};

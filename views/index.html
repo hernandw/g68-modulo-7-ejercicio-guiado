@@ -97,7 +97,7 @@
     const data = await axios.get("http://localhost:3000/ejercicios");
     let tbody = document.getElementsByTagName("tbody")[0];
     const ejercicios = data.data
-    console.log(ejercicios);
+   
 
     // Carga de la tabla
     tbody.innerHTML = "";
